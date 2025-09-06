@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Steelers Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-container">
+            <h1 class="nav-title">🏈 Steelers Quiz</h1>
+            <button class="nav-menu-btn" id="menuBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        <div class="nav-menu" id="navMenu">
+            <button class="nav-item" data-mode="home">Home</button>
+            <button class="nav-item" data-mode="current">This Year's Roster</button>
+            <button class="nav-item" data-mode="new">New Faces</button>
+            <button class="nav-item" data-mode="legends">Team Legends</button>
+            <button class="nav-item" data-mode="scoreboard">Scoreboard</button>
+        </div>
+    </nav>
+
+    <!-- Home Screen -->
+    <div class="screen active" id="homeScreen">
+        <div class="home-container">
+            <div class="home-header">
+                <h2>Test Your Steelers Knowledge</h2>
+                <p>Choose a game mode to start guessing players!</p>
+            </div>
+            
+            <div class="game-modes">
+                <button class="game-mode-btn" data-mode="current">
+                    <div class="mode-icon">👤</div>
+                    <h3>This Year's Roster</h3>
+                    <p>Current 2025 Steelers players</p>
+                </button>
+                
+                <button class="game-mode-btn" data-mode="new">
+                    <div class="mode-icon">⭐</div>
+                    <h3>New Faces</h3>
+                    <p>Fresh additions to the team</p>
+                </button>
+                
+                <button class="game-mode-btn" data-mode="legends">
+                    <div class="mode-icon">🏆</div>
+                    <h3>Team Legends</h3>
+                    <p>Steelers Hall of Famers</p>
+                </button>
+            </div>
+            
+            <div class="stats-preview">
+                <div class="stat">
+                    <span class="stat-value" id="totalScore">0</span>
+                    <span class="stat-label">Total Score</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="gamesPlayed">0</span>
+                    <span class="stat-label">Games Played</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div class="screen" id="gameScreen">
+        <div class="game-container">
+            <div class="game-header">
+                <div class="game-info">
+                    <span class="game-mode-title" id="gameModeTitle">Game Mode</span>
+                    <div class="game-stats">
+                        <span class="score">Score: <span id="currentScore">0</span></span>
+                        <span class="streak">Streak: <span id="currentStreak">0</span></span>
+                    </div>
+                </div>
+                <button class="exit-btn" id="exitGameBtn">×</button>
+            </div>
+            
+            <div class="player-card">
+                <div class="player-image-container">
+                    <img class="player-image" id="playerImage" src="" alt="Player">
+                    <div class="player-number" id="playerNumber">#</div>
+                </div>
+                
+                <div class="player-info">
+                    <div class="player-details">
+                        <span class="detail"><strong>Position:</strong> <span id="playerPosition"></span></span>
+                        <span class="detail"><strong>Height:</strong> <span id="playerHeight"></span></span>
+                        <span class="detail"><strong>Weight:</strong> <span id="playerWeight"></span> lbs</span>
+                        <span class="detail"><strong>College:</strong> <span id="playerCollege"></span></span>
+                        <span class="detail"><strong>Experience:</strong> <span id="playerExperience"></span> years</span>
+                    </div>
+                    
+                    <div class="trivia-section">
+                        <h4>Did you know?</h4>
+                        <p id="playerTrivia"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="guess-section">
+                <input type="text" class="guess-input" id="guessInput" placeholder="Enter player name..." autocomplete="off">
+                <button class="guess-btn" id="guessBtn">Guess</button>
+                <button class="skip-btn" id="skipBtn">Skip</button>
+            </div>
+            
+            <div class="result-section" id="resultSection">
+                <div class="result-message" id="resultMessage"></div>
+                <button class="next-btn" id="nextBtn">Next Player</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scoreboard Screen -->
+    <div class="screen" id="scoreboardScreen">
+        <div class="scoreboard-container">
+            <h2>Your Stats</h2>
+            
+            <div class="overall-stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="totalScoreDisplay">0</span>
+                    <span class="stat-title">Total Score</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="totalGamesDisplay">0</span>
+                    <span class="stat-title">Games Played</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="averageScoreDisplay">0</span>
+                    <span class="stat-title">Average Score</span>
+                </div>
+            </div>
+            
+            <div class="mode-stats">
+                <h3>By Game Mode</h3>
+                <div class="mode-stat" id="currentModeStats">
+                    <span class="mode-name">This Year's Roster</span>
+                    <span class="mode-score">0 points</span>
+                </div>
+                <div class="mode-stat" id="newModeStats">
+                    <span class="mode-name">New Faces</span>
+                    <span class="mode-score">0 points</span>
+                </div>
+                <div class="mode-stat" id="legendsModeStats">
+                    <span class="mode-name">Team Legends</span>
+                    <span class="mode-score">0 points</span>
+                </div>
+            </div>
+            
+            <button class="reset-btn" id="resetStatsBtn">Reset All Stats</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
