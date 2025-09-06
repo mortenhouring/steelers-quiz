@@ -1,0 +1,665 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #000;
+    color: #fff;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation;
+}
+
+/* Steelers Colors */
+:root {
+    --steelers-black: #000000;
+    --steelers-gold: #FFB612;
+    --steelers-white: #FFFFFF;
+    --steelers-gray: #C4CDD5;
+    --steelers-dark-gray: #2C2C2C;
+    --steelers-light-black: #1A1A1A;
+    --border-radius: 12px;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Navigation */
+.nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--steelers-black);
+    border-bottom: 2px solid var(--steelers-gold);
+    z-index: 1000;
+    box-shadow: var(--shadow);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    max-width: 100%;
+}
+
+.nav-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--steelers-gold);
+    margin: 0;
+}
+
+.nav-menu-btn {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.nav-menu-btn span {
+    width: 25px;
+    height: 3px;
+    background: var(--steelers-white);
+    border-radius: 2px;
+    transition: transform 0.3s ease;
+}
+
+.nav-menu-btn.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.nav-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-menu-btn.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.nav-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--steelers-light-black);
+    border-bottom: 2px solid var(--steelers-gold);
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.nav-menu.active {
+    max-height: 300px;
+}
+
+.nav-item {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    background: none;
+    border: none;
+    color: var(--steelers-white);
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    border-bottom: 1px solid var(--steelers-dark-gray);
+    transition: background-color 0.3s ease;
+}
+
+.nav-item:hover,
+.nav-item:active {
+    background: var(--steelers-dark-gray);
+    color: var(--steelers-gold);
+}
+
+.nav-item:last-child {
+    border-bottom: none;
+}
+
+/* Screens */
+.screen {
+    display: none;
+    padding-top: 80px;
+    min-height: 100vh;
+    padding-bottom: 2rem;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* Home Screen */
+.home-container {
+    padding: 2rem 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.home-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.home-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--steelers-gold);
+    margin-bottom: 0.5rem;
+}
+
+.home-header p {
+    color: var(--steelers-gray);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.game-modes {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.game-mode-btn {
+    background: var(--steelers-light-black);
+    border: 2px solid var(--steelers-dark-gray);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--steelers-white);
+}
+
+.game-mode-btn:hover,
+.game-mode-btn:active {
+    border-color: var(--steelers-gold);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.mode-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.game-mode-btn h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--steelers-gold);
+}
+
+.game-mode-btn p {
+    color: var(--steelers-gray);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.stats-preview {
+    display: flex;
+    justify-content: space-around;
+    background: var(--steelers-light-black);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    border: 2px solid var(--steelers-dark-gray);
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--steelers-gold);
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--steelers-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Game Screen */
+.game-container {
+    padding: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    background: var(--steelers-light-black);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    border: 2px solid var(--steelers-dark-gray);
+}
+
+.game-info {
+    flex: 1;
+}
+
+.game-mode-title {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--steelers-gold);
+    margin-bottom: 0.5rem;
+}
+
+.game-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: var(--steelers-gray);
+}
+
+.score,
+.streak {
+    font-weight: 500;
+}
+
+.score span,
+.streak span {
+    color: var(--steelers-white);
+    font-weight: 600;
+}
+
+.exit-btn {
+    background: var(--steelers-dark-gray);
+    border: none;
+    color: var(--steelers-white);
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.exit-btn:hover {
+    background: var(--steelers-gold);
+    color: var(--steelers-black);
+}
+
+/* Player Card */
+.player-card {
+    background: var(--steelers-light-black);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 2px solid var(--steelers-dark-gray);
+    box-shadow: var(--shadow);
+}
+
+.player-image-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.player-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--steelers-gold);
+    background: var(--steelers-dark-gray);
+}
+
+.player-number {
+    position: absolute;
+    bottom: -5px;
+    right: calc(50% - 80px);
+    background: var(--steelers-gold);
+    color: var(--steelers-black);
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    min-width: 40px;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.player-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.detail {
+    font-size: 0.9rem;
+    color: var(--steelers-gray);
+}
+
+.detail strong {
+    color: var(--steelers-white);
+    margin-right: 0.5rem;
+}
+
+.trivia-section {
+    background: var(--steelers-dark-gray);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    border-left: 4px solid var(--steelers-gold);
+}
+
+.trivia-section h4 {
+    color: var(--steelers-gold);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.trivia-section p {
+    color: var(--steelers-white);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Guess Section */
+.guess-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.guess-input {
+    background: var(--steelers-light-black);
+    border: 2px solid var(--steelers-dark-gray);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    font-size: 1.1rem;
+    color: var(--steelers-white);
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+}
+
+.guess-input:focus {
+    outline: none;
+    border-color: var(--steelers-gold);
+}
+
+.guess-input::placeholder {
+    color: var(--steelers-gray);
+}
+
+.guess-btn,
+.skip-btn,
+.next-btn {
+    background: var(--steelers-gold);
+    color: var(--steelers-black);
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.guess-btn:hover,
+.next-btn:hover {
+    background: #E6A500;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.skip-btn {
+    background: var(--steelers-dark-gray);
+    color: var(--steelers-white);
+}
+
+.skip-btn:hover {
+    background: var(--steelers-gray);
+    color: var(--steelers-black);
+}
+
+/* Result Section */
+.result-section {
+    display: none;
+    text-align: center;
+    background: var(--steelers-light-black);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    border: 2px solid var(--steelers-dark-gray);
+}
+
+.result-section.show {
+    display: block;
+}
+
+.result-message {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+}
+
+.result-message.correct {
+    background: #1B5E20;
+    color: #4CAF50;
+    border: 2px solid #4CAF50;
+}
+
+.result-message.incorrect {
+    background: #B71C1C;
+    color: #F44336;
+    border: 2px solid #F44336;
+}
+
+.result-message.skipped {
+    background: var(--steelers-dark-gray);
+    color: var(--steelers-gold);
+    border: 2px solid var(--steelers-gold);
+}
+
+/* Scoreboard Screen */
+.scoreboard-container {
+    padding: 2rem 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.scoreboard-container h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--steelers-gold);
+    margin-bottom: 2rem;
+}
+
+.overall-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 120px;
+    background: var(--steelers-light-black);
+    border: 2px solid var(--steelers-dark-gray);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--steelers-gold);
+    margin-bottom: 0.5rem;
+}
+
+.stat-title {
+    font-size: 0.8rem;
+    color: var(--steelers-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.mode-stats {
+    margin-bottom: 3rem;
+}
+
+.mode-stats h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--steelers-gold);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.mode-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--steelers-light-black);
+    border: 2px solid var(--steelers-dark-gray);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.mode-name {
+    font-weight: 500;
+    color: var(--steelers-white);
+}
+
+.mode-score {
+    font-weight: 600;
+    color: var(--steelers-gold);
+}
+
+.reset-btn {
+    width: 100%;
+    background: var(--steelers-dark-gray);
+    color: var(--steelers-white);
+    border: 2px solid var(--steelers-gold);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.reset-btn:hover {
+    background: var(--steelers-gold);
+    color: var(--steelers-black);
+}
+
+/* Responsive Design */
+@media (max-width: 375px) {
+    .home-container,
+    .game-container,
+    .scoreboard-container {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+    
+    .nav-container {
+        padding: 0.75rem;
+    }
+    
+    .nav-title {
+        font-size: 1.25rem;
+    }
+    
+    .home-header h2 {
+        font-size: 1.75rem;
+    }
+    
+    .player-image {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .player-number {
+        right: calc(50% - 70px);
+        min-width: 35px;
+        font-size: 0.9rem;
+        padding: 0.4rem;
+    }
+}
+
+/* Touch optimizations for iOS */
+@media (hover: none) {
+    .game-mode-btn:hover,
+    .nav-item:hover,
+    .guess-btn:hover,
+    .skip-btn:hover,
+    .next-btn:hover,
+    .exit-btn:hover,
+    .reset-btn:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .game-mode-btn:active,
+    .guess-btn:active,
+    .next-btn:active {
+        transform: scale(0.98);
+    }
+}
+
+/* Prevent zoom on inputs for iOS */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    .guess-input {
+        font-size: 16px;
+    }
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.screen.active {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.player-card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.result-section.show {
+    animation: fadeIn 0.3s ease-out;
+}
