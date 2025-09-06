@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoreboard - Pittsburgh Steelers Quiz</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,0,1;wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        .scoreboard-container {
+            padding: 2rem 0;
+            min-height: calc(100vh - 140px);
+        }
+
+        .scoreboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .scoreboard-title {
+            color: var(--steelers-gold);
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .scoreboard-subtitle {
+            color: var(--steelers-gray);
+            font-size: 1.2rem;
+        }
+
+        .mode-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: var(--steelers-dark-gray);
+            color: var(--steelers-white);
+            border: 2px solid var(--steelers-gold);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--steelers-gold);
+            color: var(--steelers-black);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .scoreboard-section {
+            background: var(--steelers-dark-gray);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--steelers-gold);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .scoreboard-section h3 {
+            color: var(--steelers-gold);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .scores-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .scores-table th,
+        .scores-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #404040;
+        }
+
+        .scores-table th {
+            background: var(--steelers-black);
+            color: var(--steelers-gold);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .scores-table td {
+            color: var(--steelers-white);
+        }
+
+        .scores-table tr:hover {
+            background: rgba(255, 182, 18, 0.1);
+        }
+
+        .rank-cell {
+            font-weight: 700;
+            color: var(--steelers-gold);
+            text-align: center;
+            width: 60px;
+        }
+
+        .score-cell {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--steelers-yellow);
+        }
+
+        .accuracy-cell {
+            color: var(--steelers-gray);
+        }
+
+        .date-cell {
+            color: var(--steelers-gray);
+            font-size: 0.9rem;
+        }
+
+        .no-scores {
+            text-align: center;
+            color: var(--steelers-gray);
+            font-style: italic;
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--steelers-black);
+            border: 2px solid var(--steelers-gold);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            color: var(--steelers-gold);
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--steelers-gray);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .clear-scores-btn {
+            background: var(--error-red);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .clear-scores-btn:hover {
+            background: #B91C1C;
+            transform: translateY(-2px);
+        }
+
+        .medal {
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+
+        .rank-1 .medal::before { content: "🥇"; }
+        .rank-2 .medal::before { content: "🥈"; }
+        .rank-3 .medal::before { content: "🥉"; }
+
+        @media (max-width: 768px) {
+            .scoreboard-title {
+                font-size: 2rem;
+            }
+
+            .scores-table {
+                font-size: 0.9rem;
+            }
+
+            .scores-table th,
+            .scores-table td {
+                padding: 0.7rem 0.5rem;
+            }
+
+            .mode-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .tab-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .scoreboard-section {
+                padding: 1rem;
+            }
+
+            .scores-table {
+                font-size: 0.8rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>🏈 Steelers Quiz</h1>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Game</a>
+                </li>
+                <li class="nav-item">
+                    <a href="scoreboard.html" class="nav-link active">Scoreboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="scoreboard-container">
+        <div class="container">
+            <div class="scoreboard-header">
+                <h1 class="scoreboard-title">Scoreboard</h1>
+                <p class="scoreboard-subtitle">Top scores across all game modes</p>
+            </div>
+
+            <!-- Overall Statistics -->
+            <section class="scoreboard-section">
+                <h3>Overall Statistics</h3>
+                <div class="stats-grid" id="overall-stats">
+                    <div class="stat-card">
+                        <span class="stat-value" id="total-games">0</span>
+                        <div class="stat-label">Games Played</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="best-score">0</span>
+                        <div class="stat-label">Best Score</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="avg-accuracy">0%</span>
+                        <div class="stat-label">Average Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="total-playtime">0m</span>
+                        <div class="stat-label">Total Play Time</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mode Selection Tabs -->
+            <div class="mode-tabs">
+                <button class="tab-btn active" onclick="showModeScores('currentroster')">
+                    This Year's Roster
+                </button>
+                <button class="tab-btn" onclick="showModeScores('newplayers')">
+                    New Faces
+                </button>
+                <button class="tab-btn" onclick="showModeScores('legends')">
+                    Team Legends
+                </button>
+            </div>
+
+            <!-- Current Roster Scores -->
+            <section class="scoreboard-section" id="currentroster-scores">
+                <h3>This Year's Roster - Top Scores</h3>
+                <div id="currentroster-table"></div>
+            </section>
+
+            <!-- New Players Scores -->
+            <section class="scoreboard-section" id="newplayers-scores" style="display: none;">
+                <h3>New Faces - Top Scores</h3>
+                <div id="newplayers-table"></div>
+            </section>
+
+            <!-- Legends Scores -->
+            <section class="scoreboard-section" id="legends-scores" style="display: none;">
+                <h3>Team Legends - Top Scores</h3>
+                <div id="legends-table"></div>
+            </section>
+
+            <!-- Clear Scores -->
+            <section class="scoreboard-section">
+                <h3>Reset Scoreboard</h3>
+                <p style="color: var(--steelers-gray); margin-bottom: 1rem;">
+                    Warning: This will permanently delete all saved scores and cannot be undone.
+                </p>
+                <button class="clear-scores-btn" onclick="clearAllScores()">
+                    Clear All Scores
+                </button>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Steelers Quiz Game. Test your knowledge of the Pittsburgh Steelers!</p>
+        </div>
+    </footer>
+
+    <script>
+        // Load scores on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            setupMobileNavigation();
+            loadScoreboard();
+        });
+
+        function setupMobileNavigation() {
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            if (hamburger && navMenu) {
+                hamburger.addEventListener('click', function() {
+                    hamburger.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    });
+                });
+            }
+        }
+
+        function loadScoreboard() {
+            const scores = JSON.parse(localStorage.getItem('steelersQuizScores') || '[]');
+            
+            // Update overall statistics
+            updateOverallStats(scores);
+            
+            // Load scores for each mode
+            loadModeScores('currentroster', scores);
+            loadModeScores('newplayers', scores);
+            loadModeScores('legends', scores);
+        }
+
+        function updateOverallStats(scores) {
+            const totalGames = scores.length;
+            const bestScore = scores.length > 0 ? Math.max(...scores.map(s => s.score)) : 0;
+            const avgAccuracy = scores.length > 0 ? 
+                Math.round(scores.reduce((sum, s) => sum + s.accuracy, 0) / scores.length) : 0;
+            const totalPlaytime = scores.reduce((sum, s) => sum + (s.playTime || 0), 0);
+            const totalMinutes = Math.round(totalPlaytime / 60000);
+
+            document.getElementById('total-games').textContent = totalGames;
+            document.getElementById('best-score').textContent = bestScore;
+            document.getElementById('avg-accuracy').textContent = `${avgAccuracy}%`;
+            document.getElementById('total-playtime').textContent = `${totalMinutes}m`;
+        }
+
+        function loadModeScores(mode, allScores) {
+            const modeScores = allScores
+                .filter(score => score.mode === mode)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 10);
+
+            const tableContainer = document.getElementById(`${mode}-table`);
+            
+            if (modeScores.length === 0) {
+                tableContainer.innerHTML = '<div class="no-scores">No scores recorded yet. Play a game to see your results here!</div>';
+                return;
+            }
+
+            const tableHTML = `
+                <table class="scores-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Score</th>
+                            <th>Correct</th>
+                            <th>Accuracy</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${modeScores.map((score, index) => `
+                            <tr class="rank-${index + 1}">
+                                <td class="rank-cell">
+                                    <span class="medal"></span>
+                                    ${index + 1}
+                                </td>
+                                <td class="score-cell">${score.score}</td>
+                                <td>${score.correct}/${score.total}</td>
+                                <td class="accuracy-cell">${score.accuracy}%</td>
+                                <td class="date-cell">${formatDate(score.date)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            tableContainer.innerHTML = tableHTML;
+        }
+
+        function showModeScores(mode) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show/hide score sections
+            const sections = ['currentroster-scores', 'newplayers-scores', 'legends-scores'];
+            sections.forEach(sectionId => {
+                const section = document.getElementById(sectionId);
+                section.style.display = sectionId === `${mode}-scores` ? 'block' : 'none';
+            });
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = now - date;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) {
+                return 'Today';
+            } else if (diffDays === 1) {
+                return 'Yesterday';
+            } else if (diffDays < 7) {
+                return `${diffDays} days ago`;
+            } else {
+                return date.toLocaleDateString();
+            }
+        }
+
+        function clearAllScores() {
+            if (confirm('Are you sure you want to clear all scores? This action cannot be undone.')) {
+                if (confirm('This will permanently delete all your game scores. Are you absolutely sure?')) {
+                    localStorage.removeItem('steelersQuizScores');
+                    loadScoreboard();
+                    
+                    // Show success message
+                    const successMsg = document.createElement('div');
+                    successMsg.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        right: 20px;
+                        background: var(--success-green);
+                        color: white;
+                        padding: 1rem;
+                        border-radius: 8px;
+                        box-shadow: var(--shadow-lg);
+                        z-index: 1001;
+                    `;
+                    successMsg.textContent = 'All scores have been cleared successfully.';
+                    document.body.appendChild(successMsg);
+                    
+                    setTimeout(() => successMsg.remove(), 3000);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pittsburgh Steelers Quiz Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,0,1;wght@300;400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>🏈 Steelers Quiz</h1>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link active">Game</a>
+                </li>
+                <li class="nav-item">
+                    <a href="scoreboard.html" class="nav-link">Scoreboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Game Container -->
+    <main class="main-container">
+        <!-- Game Mode Selection -->
+        <section class="game-modes" id="game-modes">
+            <div class="container">
+                <h2 class="section-title">Choose Your Challenge</h2>
+                <p class="section-subtitle">Test your knowledge of Pittsburgh Steelers players</p>
+                <div class="modes-grid">
+                    <div class="mode-card" data-mode="currentroster">
+                        <div class="mode-icon">⭐</div>
+                        <h3>This Year's Roster</h3>
+                        <p>Guess players from the current 2025 Steelers roster</p>
+                        <button class="mode-btn" onclick="startGame('currentroster')">Start Game</button>
+                    </div>
+                    <div class="mode-card" data-mode="newplayers">
+                        <div class="mode-icon">🆕</div>
+                        <h3>New Faces</h3>
+                        <p>Test your knowledge of new additions to the team</p>
+                        <button class="mode-btn" onclick="startGame('newplayers')">Start Game</button>
+                    </div>
+                    <div class="mode-card" data-mode="legends">
+                        <div class="mode-icon">🏆</div>
+                        <h3>Team Legends</h3>
+                        <p>Challenge yourself with Steelers Hall of Famers and legends</p>
+                        <button class="mode-btn" onclick="startGame('legends')">Start Game</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Play Area -->
+        <section class="game-area" id="game-area" style="display: none;">
+            <div class="container">
+                <div class="game-header">
+                    <div class="game-info">
+                        <h2 id="current-mode">Game Mode</h2>
+                        <div class="game-stats">
+                            <span class="stat">Score: <span id="current-score">0</span></span>
+                            <span class="stat">Question: <span id="question-number">1</span> / <span id="total-questions">10</span></span>
+                        </div>
+                    </div>
+                    <button class="back-btn" onclick="backToModes()">← Back to Modes</button>
+                </div>
+
+                <div class="question-container">
+                    <div class="player-card">
+                        <div class="player-image-container">
+                            <img id="player-image" src="" alt="Player Photo" style="display: none;">
+                            <div class="image-placeholder" id="image-placeholder">
+                                <span>🏈</span>
+                                <p>Player Photo</p>
+                            </div>
+                        </div>
+                        <div class="player-clues">
+                            <h3>Can you guess this Steelers player?</h3>
+                            <div class="clue-list">
+                                <div class="clue" id="clue-position">
+                                    <strong>Position:</strong> <span class="clue-text">???</span>
+                                </div>
+                                <div class="clue" id="clue-number">
+                                    <strong>Number:</strong> <span class="clue-text">???</span>
+                                </div>
+                                <div class="clue" id="clue-college">
+                                    <strong>College:</strong> <span class="clue-text">???</span>
+                                </div>
+                                <div class="clue" id="clue-trivia">
+                                    <strong>Trivia:</strong> <span class="clue-text">???</span>
+                                </div>
+                            </div>
+                            <div class="hint-controls">
+                                <button class="hint-btn" onclick="revealHint()" id="hint-btn">Reveal Hint (Cost: 5 points)</button>
+                                <p class="hints-revealed">Hints revealed: <span id="hints-count">0</span> / 4</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="answer-section">
+                        <div class="guess-input">
+                            <input type="text" id="player-guess" placeholder="Enter player name..." autocomplete="off">
+                            <button onclick="submitGuess()" id="submit-btn">Submit Guess</button>
+                        </div>
+                        <div class="guess-feedback" id="guess-feedback"></div>
+                        <div class="answer-controls" id="answer-controls" style="display: none;">
+                            <button class="next-btn" onclick="nextQuestion()">Next Question →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Game Results -->
+        <section class="game-results" id="game-results" style="display: none;">
+            <div class="container">
+                <h2>Game Complete!</h2>
+                <div class="results-summary">
+                    <div class="final-score">
+                        <span class="score-label">Final Score</span>
+                        <span class="score-value" id="final-score">0</span>
+                    </div>
+                    <div class="results-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="correct-answers">0</span>
+                            <span class="stat-label">Correct</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="total-answered">0</span>
+                            <span class="stat-label">Total</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="accuracy-percent">0%</span>
+                            <span class="stat-label">Accuracy</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="results-actions">
+                    <button class="play-again-btn" onclick="playAgain()">Play Again</button>
+                    <button class="mode-select-btn" onclick="backToModes()">Choose Different Mode</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Steelers Quiz Game. Test your knowledge of the Pittsburgh Steelers!</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
