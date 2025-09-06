@@ -6,11 +6,9 @@ let gameState = {
     currentQuestionIndex: 0,
     score: 0,
     correctAnswers: 0,
-    totalQuestions: 10,
-    hintsRevealed: 0,
-    maxHints: 4,
-    questionStartTime: null,
-    gameStartTime: null
+    totalQuestions: 0,
+    gameStartTime: null,
+    usedPlayers: new Set()
 };
 
 // Game Data Cache
@@ -50,22 +48,22 @@ function setupEventListeners() {
         });
     }
 
-    // Enter key support for guess input
-    const guessInput = document.getElementById('player-guess');
-    if (guessInput) {
-        guessInput.addEventListener('keypress', function(e) {
+    // Enter key support for jersey number input
+    const jerseyInput = document.getElementById('jersey-number-input');
+    if (jerseyInput) {
+        jerseyInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                submitGuess();
+                submitNumber();
             }
         });
 
         // Auto-focus when game starts
-        guessInput.addEventListener('focus', function() {
-            this.placeholder = 'Type player name...';
+        jerseyInput.addEventListener('focus', function() {
+            this.placeholder = 'Type jersey number...';
         });
 
-        guessInput.addEventListener('blur', function() {
-            this.placeholder = 'Enter player name...';
+        jerseyInput.addEventListener('blur', function() {
+            this.placeholder = 'Enter jersey number...';
         });
     }
 }
@@ -106,7 +104,9 @@ function startGame(mode) {
     gameState.currentQuestionIndex = 0;
     gameState.score = 0;
     gameState.correctAnswers = 0;
+    gameState.totalQuestions = gameState.players.length;
     gameState.gameStartTime = Date.now();
+    gameState.usedPlayers = new Set();
 
     // Update UI
     document.getElementById('game-modes').style.display = 'none';
@@ -136,232 +136,116 @@ function nextQuestion() {
 
     // Get current player
     gameState.currentPlayer = gameState.players[gameState.currentQuestionIndex];
-    gameState.hintsRevealed = 0;
-    gameState.questionStartTime = Date.now();
 
-    // Update UI
-    updateQuestionUI();
-    resetQuestionState();
+    // Update UI to show game page 1
+    showGamePage1();
 
     gameState.currentQuestionIndex++;
     document.getElementById('question-number').textContent = gameState.currentQuestionIndex;
 }
 
-function updateQuestionUI() {
+function showGamePage1() {
+    // Show page 1, hide page 2
+    document.getElementById('game-page-1').style.display = 'block';
+    document.getElementById('game-page-2').style.display = 'none';
+
+    // Display player name
     const player = gameState.currentPlayer;
-    
-    // Hide player image initially
-    document.getElementById('player-image').style.display = 'none';
-    document.getElementById('image-placeholder').style.display = 'flex';
+    document.getElementById('player-name-display').textContent = player.player_name;
 
-    // Reset all clues to hidden
-    const clues = document.querySelectorAll('.clue');
-    clues.forEach(clue => {
-        clue.classList.remove('revealed');
-        const clueText = clue.querySelector('.clue-text');
-        clueText.textContent = '???';
-    });
-
-    // Enable hint button
-    const hintBtn = document.getElementById('hint-btn');
-    hintBtn.disabled = false;
-    hintBtn.textContent = 'Reveal Hint (Cost: 5 points)';
-
-    // Update hints counter
-    document.getElementById('hints-count').textContent = '0';
-
-    // Clear input and feedback
-    document.getElementById('player-guess').value = '';
-    document.getElementById('guess-feedback').textContent = '';
-    document.getElementById('guess-feedback').className = 'guess-feedback';
-    document.getElementById('answer-controls').style.display = 'none';
-
-    // Enable submit button
-    const submitBtn = document.getElementById('submit-btn');
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit Guess';
+    // Clear and focus input
+    const jerseyInput = document.getElementById('jersey-number-input');
+    jerseyInput.value = '';
+    jerseyInput.disabled = false;
+    document.getElementById('go-btn').disabled = false;
 
     // Focus on input
     setTimeout(() => {
-        document.getElementById('player-guess').focus();
+        jerseyInput.focus();
     }, 100);
 }
 
-function resetQuestionState() {
-    // Reset game state for new question
-    document.getElementById('player-guess').disabled = false;
-    document.getElementById('submit-btn').disabled = false;
-}
-
-function revealHint() {
-    if (gameState.hintsRevealed >= gameState.maxHints) {
+function submitNumber() {
+    const jerseyInput = document.getElementById('jersey-number-input');
+    const guessedNumber = parseInt(jerseyInput.value);
+    
+    if (!jerseyInput.value.trim() || isNaN(guessedNumber)) {
+        alert('Please enter a valid jersey number.');
         return;
     }
 
     const player = gameState.currentPlayer;
-    const hintOrder = ['clue-position', 'clue-number', 'clue-college', 'clue-trivia'];
-    const currentHintId = hintOrder[gameState.hintsRevealed];
-    const clueElement = document.getElementById(currentHintId);
-    
-    if (clueElement) {
-        clueElement.classList.add('revealed');
-        const clueText = clueElement.querySelector('.clue-text');
-        
-        switch (currentHintId) {
-            case 'clue-position':
-                clueText.textContent = player.position;
-                break;
-            case 'clue-number':
-                clueText.textContent = player.number || 'N/A';
-                break;
-            case 'clue-college':
-                clueText.textContent = player.college;
-                break;
-            case 'clue-trivia':
-                clueText.textContent = player.trivia;
-                break;
-        }
-    }
+    const correctNumber = player.number;
+    const isCorrect = guessedNumber === correctNumber;
 
-    // Deduct points for hint
-    gameState.score = Math.max(0, gameState.score - 5);
-    updateScore();
+    // Disable input and button
+    jerseyInput.disabled = true;
+    document.getElementById('go-btn').disabled = true;
 
-    gameState.hintsRevealed++;
-    document.getElementById('hints-count').textContent = gameState.hintsRevealed;
-
-    // Disable hint button if all hints revealed
-    if (gameState.hintsRevealed >= gameState.maxHints) {
-        const hintBtn = document.getElementById('hint-btn');
-        hintBtn.disabled = true;
-        hintBtn.textContent = 'All hints revealed';
-    }
-
-    // Show player image on last hint
-    if (gameState.hintsRevealed === gameState.maxHints && player.player_image) {
-        document.getElementById('player-image').src = player.player_image;
-        document.getElementById('player-image').style.display = 'block';
-        document.getElementById('image-placeholder').style.display = 'none';
-    }
+    // Show game page 2 with results
+    showGamePage2(isCorrect, guessedNumber, correctNumber);
 }
 
-function submitGuess() {
-    const guessInput = document.getElementById('player-guess');
-    const guess = guessInput.value.trim();
-    
-    if (!guess) {
-        showFeedback('Please enter a player name.', 'incorrect');
-        return;
-    }
+function showGamePage2(isCorrect, guessedNumber, correctNumber) {
+    // Hide page 1, show page 2
+    document.getElementById('game-page-1').style.display = 'none';
+    document.getElementById('game-page-2').style.display = 'block';
 
-    const isCorrect = checkAnswer(guess, gameState.currentPlayer.player_name);
-    
+    const player = gameState.currentPlayer;
+
+    // Show result feedback
+    const resultFeedback = document.getElementById('result-feedback');
     if (isCorrect) {
-        handleCorrectAnswer();
+        resultFeedback.textContent = 'Correct!';
+        resultFeedback.className = 'result-feedback correct';
+        
+        // Add points
+        gameState.correctAnswers++;
+        gameState.score += 10;
     } else {
-        handleIncorrectAnswer();
+        resultFeedback.textContent = `Incorrect! You guessed ${guessedNumber}, but the correct answer is ${correctNumber}.`;
+        resultFeedback.className = 'result-feedback incorrect';
     }
 
-    // Disable input and submit button
-    guessInput.disabled = true;
-    document.getElementById('submit-btn').disabled = true;
-    document.getElementById('hint-btn').disabled = true;
-
-    // Show next button
-    document.getElementById('answer-controls').style.display = 'block';
-
-    // Reveal player image if not already shown
-    const player = gameState.currentPlayer;
-    if (player.player_image) {
-        document.getElementById('player-image').src = player.player_image;
-        document.getElementById('player-image').style.display = 'block';
-        document.getElementById('image-placeholder').style.display = 'none';
-    }
-
-    // Reveal all remaining clues
-    revealAllClues();
-}
-
-function checkAnswer(guess, correctName) {
-    // Normalize strings for comparison
-    const normalizeString = (str) => {
-        return str.toLowerCase()
-            .replace(/[^\w\s]/g, '') // Remove punctuation
-            .replace(/\s+/g, ' ')    // Normalize whitespace
-            .trim();
-    };
-
-    const normalizedGuess = normalizeString(guess);
-    const normalizedCorrect = normalizeString(correctName);
-
-    // Direct match
-    if (normalizedGuess === normalizedCorrect) {
-        return true;
-    }
-
-    // Check if guess matches first and last name
-    const guessParts = normalizedGuess.split(' ');
-    const correctParts = normalizedCorrect.split(' ');
-
-    // If guess is just last name, check if it matches
-    if (guessParts.length === 1 && correctParts.length > 1) {
-        return guessParts[0] === correctParts[correctParts.length - 1];
-    }
-
-    // Check for partial matches (first name + last name)
-    if (guessParts.length >= 2 && correctParts.length >= 2) {
-        const guessFirst = guessParts[0];
-        const guessLast = guessParts[guessParts.length - 1];
-        const correctFirst = correctParts[0];
-        const correctLast = correctParts[correctParts.length - 1];
-
-        return guessFirst === correctFirst && guessLast === correctLast;
-    }
-
-    return false;
-}
-
-function handleCorrectAnswer() {
-    gameState.correctAnswers++;
-    
-    // Calculate points based on time and hints used
-    const timeBonus = Math.max(0, 30 - Math.floor((Date.now() - gameState.questionStartTime) / 1000));
-    const hintPenalty = gameState.hintsRevealed * 5;
-    const basePoints = 50;
-    const questionPoints = Math.max(10, basePoints + timeBonus - hintPenalty);
-    
-    gameState.score += questionPoints;
+    // Update score display
     updateScore();
 
-    showFeedback(`Correct! +${questionPoints} points (${gameState.currentPlayer.player_name})`, 'correct');
-}
+    // Populate player details
+    document.getElementById('player-name-result').textContent = player.player_name;
+    document.getElementById('player-number-result').textContent = player.number;
+    document.getElementById('player-position-result').textContent = player.position;
+    document.getElementById('player-college-result').textContent = player.college;
+    document.getElementById('player-height-result').textContent = player.height || 'N/A';
+    document.getElementById('player-weight-result').textContent = player.weight ? `${player.weight} lbs` : 'N/A';
+    document.getElementById('player-age-result').textContent = player.age || 'N/A';
+    document.getElementById('player-trivia-result').textContent = player.trivia || 'No trivia available';
 
-function handleIncorrectAnswer() {
-    showFeedback(`Incorrect. The answer was: ${gameState.currentPlayer.player_name}`, 'incorrect');
-}
+    // Show player image if available
+    if (player.player_image) {
+        const playerImage = document.getElementById('player-image');
+        const imagePlaceholder = document.getElementById('image-placeholder-result');
+        
+        playerImage.src = player.player_image;
+        playerImage.style.display = 'block';
+        imagePlaceholder.style.display = 'none';
+        
+        // Handle image load error
+        playerImage.onerror = function() {
+            playerImage.style.display = 'none';
+            imagePlaceholder.style.display = 'flex';
+        };
+    } else {
+        document.getElementById('player-image').style.display = 'none';
+        document.getElementById('image-placeholder-result').style.display = 'flex';
+    }
 
-function revealAllClues() {
-    const player = gameState.currentPlayer;
-    const clues = [
-        { id: 'clue-position', value: player.position },
-        { id: 'clue-number', value: player.number || 'N/A' },
-        { id: 'clue-college', value: player.college },
-        { id: 'clue-trivia', value: player.trivia }
-    ];
-
-    clues.forEach(clue => {
-        const element = document.getElementById(clue.id);
-        if (element && !element.classList.contains('revealed')) {
-            element.classList.add('revealed');
-            element.querySelector('.clue-text').textContent = clue.value;
-        }
-    });
-}
-
-function showFeedback(message, type) {
-    const feedback = document.getElementById('guess-feedback');
-    feedback.textContent = message;
-    feedback.className = `guess-feedback ${type}`;
+    // Update next button text
+    const nextBtn = document.getElementById('next-question-btn');
+    if (gameState.currentQuestionIndex >= gameState.totalQuestions) {
+        nextBtn.textContent = 'See Results';
+    } else {
+        nextBtn.textContent = 'Next Question';
+    }
 }
 
 function updateScore() {
@@ -431,11 +315,9 @@ function backToModes() {
         currentQuestionIndex: 0,
         score: 0,
         correctAnswers: 0,
-        totalQuestions: 10,
-        hintsRevealed: 0,
-        maxHints: 4,
-        questionStartTime: null,
-        gameStartTime: null
+        totalQuestions: 0,
+        gameStartTime: null,
+        usedPlayers: new Set()
     };
 }
 
@@ -445,7 +327,7 @@ function showError(message) {
     errorDiv.className = 'error-notification';
     errorDiv.innerHTML = `
         <div class="error-content">
-            <span class="error-icon">⚠️</span>
+            <span class="error-icon">!</span>
             <span class="error-message">${message}</span>
             <button class="error-close" onclick="this.parentElement.parentElement.remove()">×</button>
         </div>

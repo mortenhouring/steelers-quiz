@@ -146,9 +146,12 @@ body {
     border-color: var(--steelers-yellow);
 }
 
+/* Mode Icons */
 .mode-icon {
-    font-size: 3rem;
+    font-size: 2rem;
     margin-bottom: 1rem;
+    font-weight: 700;
+    color: var(--steelers-gold);
 }
 
 .mode-card h3 {
@@ -238,6 +241,164 @@ body {
     padding: 2rem;
     box-shadow: var(--shadow-lg);
     border: 1px solid #404040;
+    margin-bottom: 2rem;
+}
+
+.result-container {
+    background: var(--steelers-dark-gray);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid #404040;
+}
+
+/* Game Page 1 Styles */
+.player-question {
+    text-align: center;
+}
+
+.player-question h3 {
+    color: var(--steelers-gold);
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+}
+
+.player-name-display {
+    background: var(--steelers-black);
+    border: 3px solid var(--steelers-gold);
+    border-radius: 15px;
+    padding: 2rem;
+    margin: 2rem 0;
+}
+
+.player-name-display h2 {
+    color: var(--steelers-white);
+    font-size: 2.5rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+.number-input-section {
+    margin-top: 2rem;
+}
+
+.number-input-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#jersey-number-input {
+    flex: 1;
+    padding: 1.2rem;
+    border: 2px solid #404040;
+    border-radius: 8px;
+    background: #1a1a1a;
+    color: var(--steelers-white);
+    font-size: 1.2rem;
+    text-align: center;
+    transition: border-color 0.3s ease;
+}
+
+#jersey-number-input:focus {
+    outline: none;
+    border-color: var(--steelers-gold);
+}
+
+#go-btn {
+    background: var(--steelers-gold);
+    color: var(--steelers-black);
+    border: none;
+    padding: 1.2rem 2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+#go-btn:hover {
+    background: var(--steelers-yellow);
+    transform: translateY(-2px);
+}
+
+#go-btn:disabled {
+    background: #404040;
+    color: #666;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Game Page 2 Styles */
+.result-feedback {
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.result-feedback.correct {
+    background: rgba(5, 150, 105, 0.2);
+    border: 2px solid var(--success-green);
+    color: var(--success-green);
+}
+
+.result-feedback.incorrect {
+    background: rgba(220, 38, 38, 0.2);
+    border: 2px solid var(--error-red);
+    color: var(--error-red);
+}
+
+.player-details {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.player-info h3 {
+    color: var(--steelers-gold);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.player-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-item {
+    background: #1a1a1a;
+    padding: 0.8rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--steelers-gold);
+}
+
+.stat-item strong {
+    color: var(--steelers-gold);
+}
+
+.player-trivia {
+    background: #1a1a1a;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--steelers-yellow);
+}
+
+.player-trivia strong {
+    color: var(--steelers-gold);
+}
+
+.next-controls {
+    text-align: center;
 }
 
 .player-card {
@@ -604,6 +765,20 @@ body {
     .player-card {
         grid-template-columns: 1fr;
         gap: 1.5rem;
+    }
+
+    .player-details {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .number-input-container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .player-stats {
+        grid-template-columns: 1fr;
     }
 
     .guess-input {
